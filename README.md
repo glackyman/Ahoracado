@@ -75,7 +75,8 @@ El cliente se comunica con el servidor usando los siguientes comandos por socket
 
 - Si el servidor no está disponible, el cliente mostrará un mensaje de error.
 - Puedes modificar la IP y el puerto en el código del cliente si el servidor se ejecuta en otra máquina o puerto.
-
+- Falta por hacer que el cliente envie al server; palabras nuevas, records.
+- Falta por obtener los records desde el cliente al servidor
 ---
 
 ## Créditos
