@@ -33,12 +33,14 @@
             this.ahorcado1 = new ComponenteJuego.ComponenteAhorcado();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.configuracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.conexionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.juegoNuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.verRecordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nuevaPalabraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnTryWord = new System.Windows.Forms.Button();
-            this.nuevaPalabraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,7 +68,7 @@
             // ahorcado1
             // 
             this.ahorcado1.Location = new System.Drawing.Point(32, 41);
-            this.ahorcado1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ahorcado1.Margin = new System.Windows.Forms.Padding(4);
             this.ahorcado1.Name = "ahorcado1";
             this.ahorcado1.NumErrores = 0;
             this.ahorcado1.Size = new System.Drawing.Size(421, 288);
@@ -86,6 +88,7 @@
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.configuracionToolStripMenuItem,
             this.juegoNuevoToolStripMenuItem,
             this.verRecordsToolStripMenuItem,
             this.nuevaPalabraToolStripMenuItem});
@@ -95,6 +98,21 @@
             this.menuStrip1.Size = new System.Drawing.Size(484, 24);
             this.menuStrip1.TabIndex = 10;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // configuracionToolStripMenuItem
+            // 
+            this.configuracionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.conexionToolStripMenuItem});
+            this.configuracionToolStripMenuItem.Name = "configuracionToolStripMenuItem";
+            this.configuracionToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
+            this.configuracionToolStripMenuItem.Text = "Configuracion";
+            // 
+            // conexionToolStripMenuItem
+            // 
+            this.conexionToolStripMenuItem.Name = "conexionToolStripMenuItem";
+            this.conexionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.conexionToolStripMenuItem.Text = "Conexion";
+            this.conexionToolStripMenuItem.Click += new System.EventHandler(this.ConexionConfig);
             // 
             // juegoNuevoToolStripMenuItem
             // 
@@ -109,6 +127,12 @@
             this.verRecordsToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
             this.verRecordsToolStripMenuItem.Text = "Ver Records";
             this.verRecordsToolStripMenuItem.Click += new System.EventHandler(this.verRecordsToolStripMenuItem_Click);
+            // 
+            // nuevaPalabraToolStripMenuItem
+            // 
+            this.nuevaPalabraToolStripMenuItem.Name = "nuevaPalabraToolStripMenuItem";
+            this.nuevaPalabraToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
+            this.nuevaPalabraToolStripMenuItem.Text = "Nueva Palabra";
             // 
             // textBox2
             // 
@@ -130,19 +154,13 @@
             // btnTryWord
             // 
             this.btnTryWord.Location = new System.Drawing.Point(10, 434);
-            this.btnTryWord.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnTryWord.Margin = new System.Windows.Forms.Padding(2);
             this.btnTryWord.Name = "btnTryWord";
             this.btnTryWord.Size = new System.Drawing.Size(56, 19);
             this.btnTryWord.TabIndex = 11;
             this.btnTryWord.Text = "Jugar";
             this.btnTryWord.UseVisualStyleBackColor = true;
             this.btnTryWord.Click += new System.EventHandler(this.btnTryWord_Click);
-            // 
-            // nuevaPalabraToolStripMenuItem
-            // 
-            this.nuevaPalabraToolStripMenuItem.Name = "nuevaPalabraToolStripMenuItem";
-            this.nuevaPalabraToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
-            this.nuevaPalabraToolStripMenuItem.Text = "Nueva Palabra";
             // 
             // Form1
             // 
@@ -183,5 +201,7 @@
         private System.Windows.Forms.ToolStripMenuItem verRecordsToolStripMenuItem;
         private System.Windows.Forms.Button btnTryWord;
         private System.Windows.Forms.ToolStripMenuItem nuevaPalabraToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem configuracionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem conexionToolStripMenuItem;
     }
 }

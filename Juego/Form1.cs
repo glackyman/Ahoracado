@@ -19,7 +19,7 @@ namespace Juego
     public partial class Form1 : Form
     {
         private readonly object l = new object();
-        private IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 31416);
+        public IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 31416);
         private Socket client;
         private Thread t;
         private Timer timer;
@@ -358,6 +358,10 @@ namespace Juego
             records(false, "");
         }
 
-       
+        private void ConexionConfig(object sender, EventArgs e)
+        {
+            ConexionConfig config = new ConexionConfig(this);
+            config.ShowDialog();
+        }
     }
 }
