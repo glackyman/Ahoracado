@@ -51,7 +51,12 @@ namespace Ejercicio5
                     if (puertoEncontrado)
                     {
                         serv.Listen(10);
-                        Console.WriteLine($"El servidor está esperando en el puerto {ie.Port}");
+                        string localIP = Dns.GetHostEntry(Dns.GetHostName())
+     .AddressList
+     .FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork)
+     ?.ToString();
+
+                        Console.WriteLine($"El servidor está esperando en {localIP} con el puerto {ie.Port}");
 
                         while (true)
                         {
