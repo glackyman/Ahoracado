@@ -49,6 +49,7 @@ El cliente es una aplicación de escritorio (WinForms) que se conecta a un servi
 2. Abrir el servidor
 3. Abrir el juego
 4. Puedes jugar con cliente si dejas el server abierto en otro equipo
+5. Los clientes pueden cambiar la ip/puerto para conectarse al servidor
 
 ---
 
