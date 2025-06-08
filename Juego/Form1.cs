@@ -5,39 +5,43 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Reflection.Emit;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Timer = System.Windows.Forms.Timer;
+using Label = System.Windows.Forms.Label;
 namespace Juego
 {
     public partial class Form1 : Form
     {
+        private readonly object l = new object();
+        private IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 31416);
+        private Socket client;
+        private Thread t;
+        private Timer timer;
+        private Label letraLabel;
+
+        private List<string> palabras = new List<string>();
+      
+
         private int vidas = 7;
         private int timeSeconds = 0;
         private int minutes;
         private int seconds;
-        private Random random;
+        private string command;
+        private string palabra = " ";
 
-        private List<string> palabras = new List<string>();
-        private string fileWords = $"{Environment.GetEnvironmentVariable("appdata")}\\palabras.txt";
-        private string fileRecords = $"{Environment.GetEnvironmentVariable("appdata")}\\records.txt";
-
-        private string palabra;
-
-        Timer timer;
-        Label letraLabel;
         public Form1()
         {
             InitializeComponent();
 
-            if (!File.Exists(fileWords))
-            {
-                MessageBox.Show("No se encontró el archivo de palabras. La aplicación se cerrará.", "FileNotFoundExeption", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Environment.Exit(0);
-            }
-
-            readFile();
+            t = new Thread(Cliente);
+            t.IsBackground = true;
+            t.Start();
 
             this.Text = $"Ahorcado";
 
@@ -45,8 +49,48 @@ namespace Juego
             timer.Interval = 10;
             timer.Tick += Timer_Tick;
             timer.Start();
-            juegoNuevoToolStripMenuItem.PerformClick();
         }
+
+        /// <summary>
+        /// Método que se ejecuta en un hilo separado para manejar la conexión del cliente al servidor.
+        /// </summary>
+        private void Cliente()
+        {
+            while (true)
+            {
+                lock (l)
+                {
+                    Monitor.Wait(l);
+                }
+
+                using (client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                {
+                    client.Connect(ep);
+                    this.Invoke(new Action(() => Text = "Connect"));
+
+                    using (NetworkStream ns = new NetworkStream(client))
+                    using (StreamReader sr = new StreamReader(ns))
+                    using (StreamWriter sw = new StreamWriter(ns))
+                    {
+                        switch (command)
+                        {
+
+                            case string s when command == "getword":
+                                GetWord();
+                                break;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            GetWord();
+            // Inicializa el componente de ahorcado
+        }
+
         /// <summary>
         /// Obtiene el tiempo transcurrido en formato "mm:ss".
         /// </summary>
@@ -56,61 +100,36 @@ namespace Juego
         }
 
         /// <summary>
-        /// Lee el archivo de palabras y las almacena en una lista.
-        /// </summary>
-        private void readFile()
-        {
-            try
-            {
-                using (StreamReader sr = new StreamReader(fileWords))
-                {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
-                    {
-
-                        string[] palabrasArray = line.Split(',');
-                        foreach (string palabra in palabrasArray)
-                        {
-                            if (!string.IsNullOrEmpty(palabra))
-                            {
-                                palabras.Add(palabra.Trim());
-                            }
-                        }
-
-                    }
-
-                    if (palabras.Count == 0)
-                    {
-                        MessageBox.Show("El archivo no tiene el formato valido. La aplicación se cerrará.", "FileNotFoundExeption", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        Environment.Exit(0);
-                    }
-                }
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show("Error con un archivo. La aplicación se cerrará.", "IOExeption", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Environment.Exit(0);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error al leer el archivo: " + ex.Message);
-            }
-        }
-
-        /// <summary>
         /// Obtiene una palabra aleatoria de la lista de palabras.
         /// </summary>
         /// <returns>palabra aleatoria en miniscula</returns> 
-        private string GetWord()
+        private void GetWord()
         {
-            if (palabras.Count == 0)
-            {
-                return null;
-            }
-            random = new Random();
-            palabra = palabras[random.Next(palabras.Count)];
+            //if (palabras.Count == 0)
+            //{
+            //    return null;
+            //}
+            //random = new Random();
+            //palabra = palabras[random.Next(palabras.Count)];
 
-            return palabra.ToLower();
+            //return palabra.ToLower();
+            using (client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+                client.Connect(ep);
+                using (NetworkStream ns = new NetworkStream(client))
+                using (StreamReader sr = new StreamReader(ns))
+                using (StreamWriter sw = new StreamWriter(ns))
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        sw.WriteLine("getword");
+                        sw.Flush();
+                        palabra = sr.ReadLine();
+                        label2.Text = palabra;
+                        printLabels();
+                    }));
+                }
+            }
         }
         
         /// <summary>
@@ -173,47 +192,47 @@ namespace Juego
         /// <param name="dato"></param>
         private void records(bool flag, string dato)
         {
-            try
-            {
-                if (flag)
-                {
-                    using (StreamWriter sw = new StreamWriter(fileRecords, true))
-                    {
-                        sw.WriteLine(dato);
-                    }
-                }
-                else
-                {
+            //try
+            //{
+            //    if (flag)
+            //    {
+            //        using (StreamWriter sw = new StreamWriter(fileRecords, true))
+            //        {
+            //            sw.WriteLine(dato);
+            //        }
+            //    }
+            //    else
+            //    {
 
-                    using (StreamReader reader = new StreamReader(fileRecords))
-                    {
-                        string line;
-                        while ((line = reader.ReadLine()) != null)
-                        {
-                            ShowRecords showRecords = new ShowRecords();
+            //        using (StreamReader reader = new StreamReader(fileRecords))
+            //        {
+            //            string line;
+            //            while ((line = reader.ReadLine()) != null)
+            //            {
+            //                ShowRecords showRecords = new ShowRecords();
 
-                            showRecords.textBox1.Text = reader.ReadToEnd();
+            //                showRecords.textBox1.Text = reader.ReadToEnd();
 
 
-                            showRecords.ShowDialog();
+            //                showRecords.ShowDialog();
 
-                        }
-                    }
-                }
-            }
-            catch (FileNotFoundException ex9)
-            {
-                MessageBox.Show("No existen records", "Nah Formidable", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                using (StreamWriter sw = new StreamWriter(fileRecords))
-                {
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (FileNotFoundException ex9)
+            //{
+            //    MessageBox.Show("No existen records", "Nah Formidable", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    using (StreamWriter sw = new StreamWriter(fileRecords))
+            //    {
 
-                }
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show("No existen records", "Nah Formidable", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    }
+            //}
+            //catch (IOException ex)
+            //{
+            //    MessageBox.Show("No existen records", "Nah Formidable", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-            }
+            //}
         }
 
         /// <summary>
@@ -238,7 +257,7 @@ namespace Juego
         /// <param name="e"></param>
         private void ahorcado_Ahorcado(object sender, EventArgs e)
         {
-            timer.Stop();
+            timer?.Stop();
             btnTryWord.Enabled = false;
             MessageBox.Show("No tienes mas vidas", "Perdiste!!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -323,9 +342,9 @@ namespace Juego
             textBox2.Clear();
             timeSeconds = 0;
             btnTryWord.Enabled = true;
-            if (!timer.Enabled)
+            if (timer != null && !timer.Enabled)
             {
-                timer.Start();
+                timer?.Start();
             }
         }
 
@@ -339,9 +358,6 @@ namespace Juego
             records(false, "");
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+       
     }
 }
