@@ -25,11 +25,29 @@ namespace Juego
         {
             txtIp.Text = parenet.ep.Address.ToString();
             txtPort.Text = parenet.ep.Port.ToString();
+
+            ValidarInputs(); // ← Comprobar si el valor inicial ya es válido
+
+            // Eventos para validar mientras escribe
+            txtIp.TextChanged += (s, ev) => ValidarInputs();
+            txtPort.TextChanged += (s, ev) => ValidarInputs();
         }
+
+        private void ValidarInputs()
+        {
+            bool ipValida = System.Net.IPAddress.TryParse(txtIp.Text, out _);
+
+            bool puertoValido = int.TryParse(txtPort.Text, out int port) &&
+                                port >= 1 && port <= 65535;
+
+            btnOK.Enabled = ipValida && puertoValido;
+            lblWarningConexion.Visible = !btnOK.Enabled;
+        }
+
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            parenet.ep.Address = System.Net.IPAddress.Parse(txtIp.Text);
+        parenet.ep.Address = System.Net.IPAddress.Parse(txtIp.Text);
             parenet.ep.Port = int.Parse(txtPort.Text);
         }
     }
