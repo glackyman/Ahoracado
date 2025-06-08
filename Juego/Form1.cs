@@ -88,6 +88,7 @@ namespace Juego
         private void Form1_Load(object sender, EventArgs e)
         {
             GetWord();
+            // Inicializa el componente de ahorcado
         }
 
         /// <summary>
