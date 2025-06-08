@@ -18,6 +18,8 @@ namespace Juego
 {
     public partial class Form1 : Form
     {
+        private string config = Environment.GetEnvironmentVariable("programdata") + "/config.txt";
+
         private readonly object l = new object();
         public IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 31416);
         private Socket client;
@@ -74,7 +76,6 @@ namespace Juego
                     {
                         switch (command)
                         {
-
                             case string s when command == "getword":
                                 GetWord();
                                 break;
@@ -87,8 +88,9 @@ namespace Juego
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            LoadConexionConfig();
+
             GetWord();
-            // Inicializa el componente de ahorcado
         }
 
         /// <summary>
@@ -100,36 +102,27 @@ namespace Juego
         }
 
         /// <summary>
-        /// Obtiene una palabra aleatoria de la lista de palabras.
+        /// Se comunica el servdor, y solicita una palabra de la lista interna.
         /// </summary>
-        /// <returns>palabra aleatoria en miniscula</returns> 
         private void GetWord()
         {
-            //if (palabras.Count == 0)
-            //{
-            //    return null;
-            //}
-            //random = new Random();
-            //palabra = palabras[random.Next(palabras.Count)];
-
-            //return palabra.ToLower();
-            using (client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            this.Invoke(new Action(() =>
             {
-                client.Connect(ep);
-                using (NetworkStream ns = new NetworkStream(client))
-                using (StreamReader sr = new StreamReader(ns))
-                using (StreamWriter sw = new StreamWriter(ns))
+                using (client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
                 {
-                    this.Invoke(new Action(() =>
+                    client.Connect(ep);
+                    using (NetworkStream ns = new NetworkStream(client))
+                    using (StreamReader sr = new StreamReader(ns))
+                    using (StreamWriter sw = new StreamWriter(ns))
                     {
                         sw.WriteLine("getword");
                         sw.Flush();
                         palabra = sr.ReadLine();
                         label2.Text = palabra;
                         printLabels();
-                    }));
+                    }
                 }
-            }
+            }));
         }
         
         /// <summary>
@@ -358,10 +351,84 @@ namespace Juego
             records(false, "");
         }
 
+        /// <summary>
+        /// Saca un modal para cambiar la configuracion red del cliente
+        /// Si la respuesta es OK cambia la configuración de conexión y la guarda en un archivo de texto.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ConexionConfig(object sender, EventArgs e)
         {
             ConexionConfig config = new ConexionConfig(this);
             config.ShowDialog();
+
+            if (config.DialogResult == DialogResult.OK)
+            {
+                SaveConexionConfig();
+            }
+        }
+
+        /// <summary>
+        /// Carga la configuración de conexión desde un archivo de texto.
+        /// Si el archivo no existe, crea uno con la IP y puerto actuales.
+        /// Si el archivo existe, lee la IP y el puerto y los asigna al IPEndPoint.
+        /// </summary>
+        private void LoadConexionConfig()
+        {
+            try
+            {
+                if (!File.Exists(config))
+                {
+                    // Guardar IP y puerto actuales
+                    using (StreamWriter sw = new StreamWriter(config))
+                    {
+                        sw.WriteLine(ep.Address.ToString());
+                        sw.WriteLine(ep.Port.ToString());
+                    }
+                }
+                else
+                {
+                    // Leer IP y puerto del archivo
+                    string[] lines = File.ReadAllLines(config);
+                    if (lines.Length >= 2)
+                    {
+                        string ipStr = lines[0].Trim();
+                        string portStr = lines[1].Trim();
+
+                        if (IPAddress.TryParse(ipStr, out IPAddress ip) && int.TryParse(portStr, out int port))
+                        {
+                            ep = new IPEndPoint(ip, port);
+                        }
+                        else
+                        {
+                            MessageBox.Show("La configuración de IP o puerto no es válida.", "Error de configuración", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar la configuración de conexión: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Guarda la configuración de conexión en un archivo de texto.
+        /// </summary>
+        private void SaveConexionConfig()
+        {
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(config))
+                {
+                    sw.WriteLine(ep.Address.ToString());
+                    sw.WriteLine(ep.Port.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al guardar la configuración de conexión: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
