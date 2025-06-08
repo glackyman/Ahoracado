@@ -6,15 +6,11 @@ Este proyecto es una implementación del clásico **Juego del Ahorcado** desarro
 
 El cliente es una aplicación de escritorio (WinForms) que se conecta mediante TCP a un servidor para obtener palabras, registrar partidas y consultar récords.
 
-----------
-
 ## 🧱 Estructura de la Solución
 
 -   **🖥️ Juego**: Aplicación WinForms donde el usuario juega al ahorcado.
 -   **🖧 Ejercicio5 (Servidor)**: Aplicación de consola que gestiona palabras y récords vía sockets TCP.
 -   **📦 ComponenteJuego** _(opcional)_: Biblioteca de componentes reutilizables para el juego.
-
-----------
 
 ## ⚙️ Funcionamiento
 
@@ -35,21 +31,7 @@ El cliente es una aplicación de escritorio (WinForms) que se conecta mediante T
     -   El tiempo de partida se registra.
     -   Al ganar, puede guardar su récord; al perder, puede reiniciar.
 
-----------
-
 ## 🖼️ Capturas de Pantalla _(opcional)_
-
-> Puedes incluir aquí imágenes del **cliente en ejecución** y del **servidor funcionando**.
-
-Markdown
-
-```
-![Cliente en ejecución](img/cliente.png)
-![Servidor en consola](img/servidor.png)
-
-```
-
-----------
 
 ## 🧪 Instalación y Ejecución
 
@@ -65,8 +47,6 @@ Markdown
 3.  **Ejecuta el servidor**: Inicia el proyecto `Ejercicio5` (por ejemplo, haciendo clic derecho en el proyecto y seleccionando "Depurar" -> "Iniciar nueva instancia" o configurándolo como proyecto de inicio múltiple).
 4.  **Ejecuta el cliente**: Inicia el proyecto `Juego` de la misma manera.
 5.  **Configuración de red**: Si el servidor se ejecuta en otra máquina, puedes modificar la IP y el puerto en la configuración del cliente (a través de la interfaz del juego) para establecer la conexión correcta.
-
-----------
 
 ## 🛰️ Comandos del Servidor
 
@@ -94,14 +74,10 @@ Añade un nuevo récord (nombre y tiempo) al servidor.
 
 Exportar a Hojas de cálculo
 
-----------
-
 ## 🧩 Personalización
 
 -   Puedes añadir palabras al servidor utilizando el comando `sendword` desde el cliente, o editando manualmente el archivo `words.txt` en la ubicación del servidor (por defecto, `C:\ProgramData\AhorcadoGame\`).
 -   Los récords se almacenan en el servidor (`records.bin`) y pueden consultarse desde el cliente (funcionalidad en desarrollo).
-
-----------
 
 ## ✅ TODO
 
@@ -110,14 +86,10 @@ Exportar a Hojas de cálculo
 -   Desarrollar la funcionalidad para **obtener y mostrar récords** desde el cliente (`getrecords`), incluyendo una interfaz de usuario adecuada.
 -   Mejorar el **manejo de errores** cuando el servidor no esté disponible o la conexión falle, proporcionando feedback claro al usuario y evitando la congelación de la UI. Esto puede implicar el uso de operaciones asíncronas para la comunicación de red.
 
-----------
-
 ## 📝 Notas
 
 -   El cliente mostrará un mensaje de error si no puede conectarse al servidor en la IP y puerto especificados.
 -   La IP y el puerto de conexión del cliente son configurables y se guardan para futuras sesiones.
-
-----------
 
 ## 🧠 Tecnologías Utilizadas
 
@@ -125,8 +97,6 @@ Exportar a Hojas de cálculo
 -   **Windows Forms (WinForms)**
 -   **.NET Framework 4.7.2**
 -   **Sockets TCP**
-
-----------
 
 ## 👨‍💻 Créditos
 
