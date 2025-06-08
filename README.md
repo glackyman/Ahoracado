@@ -32,7 +32,8 @@ El cliente es una aplicación de escritorio (WinForms) que se conecta mediante T
     -   Al ganar, puede guardar su récord; al perder, puede reiniciar.
 
 ## 🖼️ Capturas de Pantalla _(opcional)_
-
+![Cliente en ejecución](img/Client.png)
+![Servidor en consola](img/Server.png)
 ## 🧪 Instalación y Ejecución
 
 ### Requisitos
