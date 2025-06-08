@@ -1,84 +1,133 @@
-# Juego del Ahorcado (Cliente/Servidor)
+# 🎮 Juego del Ahorcado (Cliente/Servidor)
 
-## Descripción
+## 📌 Descripción
 
-Este proyecto es una implementación del clásico **juego del ahorcado** en C# utilizando una arquitectura cliente-servidor sobre .NET Framework 4.7.2.  
-El cliente es una aplicación de escritorio (WinForms) que se conecta a un servidor TCP para obtener palabras y gestionar los récords de los jugadores.
+Este proyecto es una implementación del clásico **Juego del Ahorcado** desarrollado en **C#** utilizando una arquitectura **cliente-servidor** sobre **.NET Framework 4.7.2**.
 
----
+El cliente es una aplicación de escritorio (WinForms) que se conecta mediante TCP a un servidor para obtener palabras, registrar partidas y consultar récords.
 
-## Estructura de la solución
+----------
 
-- **Juego**: Cliente WinForms donde el usuario juega al ahorcado.
-- **Ejercicio5 (TheServer)**: Servidor de consola que gestiona palabras y récords.
-- **ComponenteJuego**: (Opcional) Componentes reutilizables para el juego.
+## 🧱 Estructura de la Solución
 
----
+-   **🖥️ Juego**: Aplicación WinForms donde el usuario juega al ahorcado.
+-   **🖧 Ejercicio5 (Servidor)**: Aplicación de consola que gestiona palabras y récords vía sockets TCP.
+-   **📦 ComponenteJuego** _(opcional)_: Biblioteca de componentes reutilizables para el juego.
 
-## Funcionamiento
+----------
 
-1. **El servidor** debe ejecutarse antes que el cliente.
-   - Escucha conexiones TCP en el puerto 31416.
-   - Gestiona archivos de palabras y récords.
-   - Atiende peticiones de los clientes para obtener palabras, añadir palabras y guardar/consultar récords.
+## ⚙️ Funcionamiento
 
-2. **El cliente** se conecta al servidor para:
-   - Solicitar una palabra aleatoria.
-   - Enviar un nuevo récord al finalizar la partida.
-   - Consultar la lista de récords.
+1.  **El servidor** debe iniciarse antes que el cliente:
+    
+    -   Escucha conexiones TCP en el puerto `31416`.
+    -   Gestiona archivos de palabras y récords.
+    -   Atiende peticiones de los clientes para obtener y guardar datos.
+2.  **El cliente** se conecta al servidor para:
+    
+    -   Solicitar una palabra aleatoria.
+    -   Enviar un nuevo récord al terminar una partida.
+    -   Consultar la lista de récords.
+3.  **Dinámica del juego**:
+    
+    -   El usuario adivina la palabra letra por letra.
+    -   Tiene **7 vidas**.
+    -   El tiempo de partida se registra.
+    -   Al ganar, puede guardar su récord; al perder, puede reiniciar.
 
-3. **Dinámica del juego**:
-   - El usuario adivina la palabra letra a letra.
-   - Dispone de 7 vidas.
-   - El tiempo de partida se registra.
-   - Al ganar, puede guardar su récord.
-   - Al perder, puede iniciar una nueva partida.
+----------
 
----
+## 🖼️ Capturas de Pantalla _(opcional)_
 
-## Instalación y ejecución
+> Puedes incluir aquí imágenes del **cliente en ejecución** y del **servidor funcionando**.
+
+Markdown
+
+```
+![Cliente en ejecución](img/cliente.png)
+![Servidor en consola](img/servidor.png)
+
+```
+
+----------
+
+## 🧪 Instalación y Ejecución
 
 ### Requisitos
 
-- Windows con .NET Framework 4.7.2
-- Visual Studio 2022 (recomendado)
+-   Windows con .NET Framework 4.7.2
+-   Visual Studio 2022 (recomendado para el desarrollo)
 
 ### Pasos
 
-1. Descargar el Servidor y el Juego
-2. Abrir el servidor
-3. Abrir el juego
-4. Puedes jugar con cliente si dejas el server abierto en otro equipo
-5. Los clientes pueden cambiar la ip/puerto para conectarse al servidor
+1.  Clona o descarga el repositorio que contiene el Servidor (`Ejercicio5`) y el Cliente (`Juego`).
+2.  Abre la solución (`.sln`) en Visual Studio.
+3.  **Ejecuta el servidor**: Inicia el proyecto `Ejercicio5` (por ejemplo, haciendo clic derecho en el proyecto y seleccionando "Depurar" -> "Iniciar nueva instancia" o configurándolo como proyecto de inicio múltiple).
+4.  **Ejecuta el cliente**: Inicia el proyecto `Juego` de la misma manera.
+5.  **Configuración de red**: Si el servidor se ejecuta en otra máquina, puedes modificar la IP y el puerto en la configuración del cliente (a través de la interfaz del juego) para establecer la conexión correcta.
 
----
+----------
 
-## Comandos del servidor
+## 🛰️ Comandos del Servidor
 
-El cliente se comunica con el servidor usando los siguientes comandos por socket:
+El cliente se comunica con el servidor por sockets TCP mediante los siguientes comandos de protocolo:
 
-- `getword` — Devuelve una palabra aleatoria.
-- `sendword <palabra>` — Añade una nueva palabra.
-- `getrecords` — Devuelve la lista de récords.
-- `sendrecord <nombre,tiempo>` — Añade un nuevo récord.
+Comando
 
----
+Descripción
 
-## Personalización
+`getword`
 
-- Puedes añadir palabras al servidor usando el comando `sendword` o editando el archivo de palabras.
-- Los récords se almacenan en el servidor y pueden consultarse desde el cliente.
+Devuelve una palabra aleatoria del servidor.
 
----
+`sendword <palabra>`
 
-## Notas
+Añade una nueva palabra a la lista del servidor.
 
-- Si el servidor no está disponible, el cliente mostrará un mensaje de error.
-- Puedes modificar la IP y el puerto en el código del cliente si el servidor se ejecuta en otra máquina o puerto.
-- Falta por hacer que el cliente envie al server; palabras nuevas, records.
-- Falta por obtener los records desde el cliente al servidor
----
+`getrecords`
 
-## Créditos
+Devuelve la lista de récords almacenados.
 
-Desarrollado como ejercicio de programación en C# y .NET Framework.
+`sendrecord <nombre,tiempo>`
+
+Añade un nuevo récord (nombre y tiempo) al servidor.
+
+Exportar a Hojas de cálculo
+
+----------
+
+## 🧩 Personalización
+
+-   Puedes añadir palabras al servidor utilizando el comando `sendword` desde el cliente, o editando manualmente el archivo `words.txt` en la ubicación del servidor (por defecto, `C:\ProgramData\AhorcadoGame\`).
+-   Los récords se almacenan en el servidor (`records.bin`) y pueden consultarse desde el cliente (funcionalidad en desarrollo).
+
+----------
+
+## ✅ TODO
+
+-   Implementar la funcionalidad completa para **enviar nuevas palabras** desde el cliente (`sendword`).
+-   Asegurar el correcto **envío de récords** desde el cliente al servidor (`sendrecord`).
+-   Desarrollar la funcionalidad para **obtener y mostrar récords** desde el cliente (`getrecords`), incluyendo una interfaz de usuario adecuada.
+-   Mejorar el **manejo de errores** cuando el servidor no esté disponible o la conexión falle, proporcionando feedback claro al usuario y evitando la congelación de la UI. Esto puede implicar el uso de operaciones asíncronas para la comunicación de red.
+
+----------
+
+## 📝 Notas
+
+-   El cliente mostrará un mensaje de error si no puede conectarse al servidor en la IP y puerto especificados.
+-   La IP y el puerto de conexión del cliente son configurables y se guardan para futuras sesiones.
+
+----------
+
+## 🧠 Tecnologías Utilizadas
+
+-   **C#**
+-   **Windows Forms (WinForms)**
+-   **.NET Framework 4.7.2**
+-   **Sockets TCP**
+
+----------
+
+## 👨‍💻 Créditos
+
+Desarrollado como ejercicio educativo de programación en C# y .NET Framework.
