@@ -45,11 +45,10 @@ El cliente es una aplicación de escritorio (WinForms) que se conecta a un servi
 
 ### Pasos
 
-1. Clona o descarga el repositorio.
-2. Abre la solución en Visual Studio.
-3. Compila ambos proyectos: primero el servidor (`Ejercicio5/TheServer.csproj`), luego el cliente (`Juego/Juego.csproj`).
-4. Ejecuta el servidor (deja la consola abierta).
-5. Ejecuta el cliente y comienza a jugar.
+1. Descargar el Servidor y el Juego
+2. Abrir el servidor
+3. Abrir el juego
+4. Puedes jugar con cliente si dejas el server abierto en otro equipo
 
 ---
 
