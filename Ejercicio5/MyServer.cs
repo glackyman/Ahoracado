@@ -24,14 +24,14 @@ namespace Ejercicio5
         List<Record> colRecords = new List<Record>();
         public void init()
         {
-            int port = 31416;
+            int puertoHurraco = 31416;
             bool puertoEncontrado = false;
 
-            IPEndPoint ie = new IPEndPoint(IPAddress.Any, port);
+            IPEndPoint ie = new IPEndPoint(IPAddress.Any, puertoHurraco);
 
             using (serv = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
-                while (!puertoEncontrado && port <= 65535)
+                while (!puertoEncontrado && puertoHurraco <= 65535)
                 {
                     try
                     {
@@ -41,8 +41,8 @@ namespace Ejercicio5
                     catch (SocketException ex) when (ex.ErrorCode == (int)SocketError.AddressAlreadyInUse)
                     {
                         Console.WriteLine($"El puerto {ie.Port} está en uso.");
-                        port++;
-                        ie.Port = ie.Port == port ? 1024 : ie.Port++;
+                        puertoHurraco++;
+                        ie.Port = ie.Port == puertoHurraco ? 1024 : ie.Port++;
                     }
                 }
 
